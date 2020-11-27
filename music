@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+
+require "yaml"
+
+class Osa
+  def initialize(command = nil)
+    running ? tell(command) : tell("activate")
+
+    $stdout << tell(current) unless stopped?
+  end
+
+  private
+
+  def application
+    %(application "#{player}")
+  end
+
+  def config
+    YAML.load_file("#{ENV["HOME"]}/.config/music")
+  end
+
+  def current
+    %(artist of the current track & " - " & name of the current track)
+  end
+
+  def player
+    config.fetch("player", "Music")
+  end
+
+  def running
+    tell("running") =~ /true/
+  end
+
+  def stopped?
+    tell("player state") =~ /stopped/
+  end
+
+  def tell(command)
+    command && `osascript -e 'tell #{application} to #{command}'`
+  end
+end
+
+if ARGV.empty?
+  Osa.new
+else
+  case ARGV[0]
+  when "-p" then Osa.new("play previous track")
+  when "-n" then Osa.new("play next track")
+  else abort("invalid option `#{ARGV[0]}`")
+  end
+end
