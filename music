@@ -32,7 +32,7 @@ class Osa
   end
 
   def stopped?
-    tell("player state") =~ /stopped/
+    tell("player state") =~ /stopped|paused/
   end
 
   def tell(command)
@@ -46,6 +46,7 @@ else
   case ARGV[0]
   when "-p" then Osa.new("play previous track")
   when "-n" then Osa.new("play next track")
+  when "-s" then Osa.new("pause")
   else abort("invalid option `#{ARGV[0]}`")
   end
 end
