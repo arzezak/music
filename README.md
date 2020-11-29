@@ -19,3 +19,5 @@ Type `music` to get the current track information.
 Type `music -n` to play the next track.
 
 Type `music -p` to play the previous track.
+
+Type `music -s` to stop.
